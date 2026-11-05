@@ -1,10 +1,7 @@
 package aed.tp2;
 
-public class ListaEnlazada<T> {
-    // TODO: serviria para los pares de exclusivos
-    // TODO: define un handle interno pero no lo guarda, 
-    // lo tienen los usuarios para acceder en O(1)
-    
+public class ListaEnlazada <T extends Comparable<T>>{
+  
     private int _longitud;
     private Nodo _primero;
     private Nodo _ultimo;
@@ -37,8 +34,18 @@ public class ListaEnlazada<T> {
             this.puntero=null;
         }
 
-        public int compareTo(Handle<T> otroHandle){
-            return this.valor().compareTo(otroHandle.valor());
+        public void modificar(T valor_a_modificar){ 
+            // TODO
+            return;
+        }
+
+        public int compareTo(Handle<T> handle_a_comparar){
+            return this.valor().compareTo(handle_a_comparar.valor());
+        }
+
+        public boolean equals(Handle<T> handle_a_comparar){
+            // TODO
+            return true;
         }
 
         public String toString(){
@@ -97,35 +104,37 @@ public class ListaEnlazada<T> {
 
     public Handle<T> insertarEn(int i, T elem){
 
-        Nodo nuevo = new Nodo(elem);
-        Nodo siguiente = _primero;
-        int j = 0;
+        Nodo nodoNuevo = new Nodo(elem);
+        Nodo nodoIterador = _primero;
 
+        int j = 0;
+        // al final del loop es el i-esimo nodo
         while(j < _longitud && j<i){
-            siguiente = siguiente.sig;
+            nodoIterador = nodoIterador.sig;
             j++;
         }
-
-        Nodo previo = null;
+        // el que antes era i-ésimo es i-ésimo + 1 y nuevo pasa a ser i-ésimo
+        nodoNuevo.sig = nodoIterador;
         
-        nuevo.sig = siguiente;
-        if(siguiente != null){
-            previo = siguiente.prev;
-            siguiente.prev = nuevo;
+        // actualizamos los vecinos del nuevo elemento y las referencias viejas
+        if(nodoIterador != null){
+            nodoNuevo.prev  = nodoIterador.prev;
+            nodoIterador.prev = nodoNuevo;
             
         }else{
-            previo = _ultimo;
-            _ultimo = nuevo;
+            nodoNuevo.prev = _ultimo;
+            _ultimo = nodoNuevo;
+        }
+        
+        // actualiar siguiente del vecino previo
+        if(nodoNuevo.prev != null){
+            nodoNuevo.prev.sig = nodoNuevo;
+        }else{
+            _primero = nodoNuevo;
         }
 
-        nuevo.prev = previo;
-        if(previo != null){
-            previo.sig = nuevo;
-        }else{
-            _primero = nuevo;
-        }
         _longitud++;
-        return new HandleLE(nuevo);   
+        return new HandleLE(nodoNuevo);   
     }
 
     public T obtener(int i) {

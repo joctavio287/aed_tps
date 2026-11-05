@@ -21,9 +21,9 @@ class MaxHeap <Integer extends Comparable<Integer>>{
     
     public void maximo();
     
-    public void agregar(T elem);
+    public HandleMH agregar(T elem);
     
-    public T sacarMaximo();
+    public HandleMH sacarMaximo();
     
  
     // TODO: falta hacer la clase entera, para eso, qué operaciones tiene? Y qué estructura?
@@ -33,4 +33,39 @@ class MaxHeap <Integer extends Comparable<Integer>>{
     // Serían usuarios los elementos, ordenados por disponivles
 
     // implementa una cola no?
+
+        private class HandleMH implements Handle<T>{
+        private Nodo puntero;
+
+        private HandleMH(Nodo n){
+            this.puntero = n;
+        }
+
+        public T valor(){
+            return this.puntero.dato;
+        }
+
+        public void eliminar(){
+            ListaEnlazada.this.eliminarNodo(this.puntero);
+            this.puntero=null;
+        }
+
+        public void modificar(T valor_a_modificar){ 
+            // TODO
+            return;
+        }
+
+        public int compareTo(Handle<T> handle_a_comparar){
+            return this.valor().compareTo(handle_a_comparar.valor());
+        }
+
+        public boolean equals(Handle<T> handle_a_comparar){
+            // TODO
+            return true;
+        }
+
+        public String toString(){
+            return this.valor().toString();
+        }
+    }
 }

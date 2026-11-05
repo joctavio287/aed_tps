@@ -11,8 +11,9 @@ public class AirMiles implements SistemaAirMiles {
     
     // TODO: qué come este maxheap
     private MaxHeap<Integer> _rankingMillasDisponibles; 
-    // TODO: preguntar cómo hacer la estructura interna: se sugiere un arreglo matricial
-        private ListaEnlazada<ListaEnlazada<Integer>> _paresTransferidoresExclusivos; 
+    
+    //TODO: es la pregunta de Daniela, si no necesitamos el comaprable esto estaría bien
+    private ListaEnlazada<int[]> _paresTransferidoresExclusivos; 
 
 
     public AirMiles() {
@@ -36,6 +37,11 @@ public class AirMiles implements SistemaAirMiles {
     }
 
     public void transferirMillas(int origen, int destino, double cantidad) {
+        // actualiza parestransferidores exclusivos
+        //   si origen o destino tiene un handle prexsitente sin el par destino u origen correspondiente
+        //   se elimina el par de la lista vía el handle
+        //   si no tiene un handle y su par tampoco, lo crea y lo guarda en ambos.
+        
         throw new UnsupportedOperationException("Sin implementar");
     }
 

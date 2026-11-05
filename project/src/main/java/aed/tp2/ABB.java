@@ -142,6 +142,7 @@ public class ABB<K extends Comparable<K>, V> implements Diccionario<K, V> {
     }
 
     public V obtener(K clave_buscada){
+        //no hay q hacer el chequeo de arriba?
         Nodo nodoCandidato = buscarNodo(clave_buscada);
         return nodoCandidato.valor;
     }
