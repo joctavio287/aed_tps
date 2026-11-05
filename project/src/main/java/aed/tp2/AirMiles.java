@@ -1,13 +1,18 @@
 package aed.tp2;
 
 public class AirMiles implements SistemaAirMiles {
-    /*COMPLETAR*/
-    usuarios; // ABB
-    elMasCanjeador; //ID
-    elMasAcumulador; //ID
-    ranking; //MAxHeap
-    promos; //Trie
-    paresExcl; //ListaEnlazada de pares
+
+    private ABB<Integer, Usuario> usuarios; 
+    
+    private int _elMasAcumulador;
+    private int _elMasCanjeador;
+    
+    private Trie<String, Promocion> _promociones;
+    
+    // TODO: qué come este maxheap
+    private MaxHeap<Integer> _rankingMillasDisponibles; 
+    // TODO: preguntar cómo hacer la estructura interna: se sugiere un arreglo matricial
+        private ListaEnlazada<ListaEnlazada<Integer>> _paresTransferidoresExclusivos; 
 
 
     public AirMiles() {
