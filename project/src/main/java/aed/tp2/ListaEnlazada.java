@@ -1,6 +1,6 @@
 package aed.tp2;
 
-public class ListaEnlazada<T extends Comparable<T>> {
+public class ListaEnlazada<T> {
     // TODO: serviria para los pares de exclusivos
     // TODO: define un handle interno pero no lo guarda, 
     // lo tienen los usuarios para acceder en O(1)
