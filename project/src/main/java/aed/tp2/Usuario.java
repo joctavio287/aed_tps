@@ -9,10 +9,10 @@ class Usuario {
     private double millasTotales;
     private double millasCanjeadas;
 
-    // esta clase no genera handles, guarda para vincularse 
-    // a otras estructuras
-    // este es un handle al heap
-    private handleRanking;
-    // este es un handle a la listaenlazada
-    private handleExclsuivo;  
+//     // esta clase no genera handles, guarda para vincularse 
+//     // a otras estructuras
+//     // este es un handle al heap
+//     private handleRanking;
+//     // este es un handle a la listaenlazada
+//     private handleExclsuivo;  
 }
