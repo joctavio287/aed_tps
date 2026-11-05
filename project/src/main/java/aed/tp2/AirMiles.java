@@ -2,6 +2,13 @@ package aed.tp2;
 
 public class AirMiles implements SistemaAirMiles {
     /*COMPLETAR*/
+    usuarios; // ABB
+    elMasCanjeador; //ID
+    elMasAcumulador; //ID
+    ranking; //MAxHeap
+    promos; //Trie
+    paresExcl; //ListaEnlazada de pares
+
 
     public AirMiles() {
         throw new UnsupportedOperationException("Sin implementar");
