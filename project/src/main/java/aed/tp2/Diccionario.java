@@ -1,9 +1,37 @@
 package aed.tp2;
 
 interface Diccionario <K, V> {
-    // pertenece, definir, obtener, borrarr?
-    // chequea si K pertenece a Dicc
-    // inserta una llave y un valor
-    // obtiene un valor indexando por llave
-    // elimina un valor y lo devuelve? tipo pop de numpy
+    /**
+     * Verifica si la clave existe
+     * 
+     */
+    public boolean pertenece(K clave);
+    
+    /**
+     * Inserta una par (clave, valor)
+     * Si no existe se rompe: es parte del "requiere"
+     * 
+     */
+    public void insertar(K clave, V valor);
+    
+    /**
+     * Devuelve el valor de la clave 
+     * Si no existe se rompe: es parte del "requiere"
+     * 
+     */
+    public V obtener(K clave);
+
+    /**
+     * Elimina el par (clave, valor)
+     * Si no existe no hace nada
+     * TODO: verificar si necesitamos devolver el ítem borrado
+     */
+    public void eliminar(K clave);
+
+    /**
+     * Devuelve la cantidad de claves
+     * 
+     *  
+     */
+    public int tamaño();
 } 

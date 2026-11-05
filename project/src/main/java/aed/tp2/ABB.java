@@ -1,27 +1,21 @@
 package aed.tp2;
 
-// Todos los tipos de datos "Comparables" tienen el método compareTo()
-// elem1.compareTo(elem2) devuelve un entero. Si es mayor a 0, entonces elem1 > elem2
-class ABB<T extends Comparable<T>> { //esto significa que come T genérico y que T es comaprable
-    // TODO: falta adaptar a diccionario → que operaciones modificamos?
-    // class ABB< // habria que escribir algo similar tipo diccionario
-    // onda llaves comparables, valores cualquier cosa
-    // T extends Comparable<T> significa Cualquier tipo T que además pueda ser comparable con obj
-    // del mismo tipo
-    // despues podemos forzar el implements Diccionario para asegurarnos de hacer las operaciones que queremos
-    
-    // Agregar atributos privados del Conjunto
+public class ABB<K extends Comparable<K>, V> implements Diccionario<K, V> { 
     private int _cardinal;
     private Nodo _raiz;
 
     private class Nodo {
-        T valor;
+        K clave;
+        V valor;
+        
         Nodo padre;
         Nodo izq;
         Nodo der;
 
-        Nodo(T v) {
-            valor = v;
+        Nodo(K cl, V val) {
+            clave = cl;
+            valor = val;
+            
             padre = null;
             izq = null;
             der = null;
@@ -33,14 +27,15 @@ class ABB<T extends Comparable<T>> { //esto significa que come T genérico y que
         _cardinal = 0;
     }
 
-    public int cardinal() {
+    public int tamaño() {
         return this._cardinal;
     }
     
-    private Nodo buscarNodo(T elem){
+    private Nodo buscarNodo(K clave_buscada){
         Nodo resultNodo = _raiz;
         while (resultNodo != null) {
-            int comparacion = elem.compareTo(resultNodo.valor);
+            int comparacion = clave_buscada.compareTo(resultNodo.clave);
+            
             if (comparacion==0){
                 return resultNodo;
             }
@@ -71,14 +66,6 @@ class ABB<T extends Comparable<T>> { //esto significa que come T genérico y que
         }
         return resultNodo;
     }
-
-    private Nodo maximoNodo(Nodo n){
-        Nodo resultNodo = n; 
-        while (resultNodo != null && resultNodo.der != null) {
-            resultNodo = resultNodo.der;
-        }
-        return resultNodo;
-    }
     
     private Nodo sucesor(Nodo n){
         if (n.der != null) {
@@ -93,57 +80,6 @@ class ABB<T extends Comparable<T>> { //esto significa que come T genérico y que
             }
             return resultNodo;
         }
-    }
-
-    public T minimo(){
-        Nodo minimoNodo = minimoNodo(_raiz);
-        if (minimoNodo == null){
-            return null;
-        }
-        else{
-            return minimoNodo.valor;
-        }
-    }
-
-    public T maximo(){
-        Nodo maximoNodo = maximoNodo(_raiz);
-        if (maximoNodo == null){
-            return null;
-        }
-        else{
-            return maximoNodo.valor;
-        }
-    }
-
-    public void insertar(T elem){
-        if (this._raiz == null){
-            Nodo nuevoNodo = new Nodo(elem);
-            this._raiz = nuevoNodo;
-            this._cardinal++;
-            return;
-        }
-        Nodo nodoCandidatoPrevio = buscarNodo(elem);
-        int comparacion = elem.compareTo(nodoCandidatoPrevio.valor);
-        
-        if (comparacion==0){
-            return;
-        }
-        else{
-            Nodo nuevoNodo = new Nodo(elem);
-            nuevoNodo.padre = nodoCandidatoPrevio;
-            this._cardinal++;
-            if (comparacion>0){
-                nodoCandidatoPrevio.der = nuevoNodo;
-            }
-            else {
-                nodoCandidatoPrevio.izq = nuevoNodo;
-            }
-        }
-    }
-
-    public boolean pertenece(T elem){
-        Nodo nodoCandidato = buscarNodo(elem);
-        return nodoCandidato!=null && elem.compareTo(nodoCandidato.valor)==0;
     }
 
     private void reemplazar(Nodo nodo){ 
@@ -170,10 +106,51 @@ class ABB<T extends Comparable<T>> { //esto significa que come T genérico y que
             hijo.padre = padre;
         }
     }
+    
+    public void insertar(K clave_insertada, V valor_insertado){
+        
+        if (this._raiz == null){
+            Nodo nuevoNodo = new Nodo(clave_insertada, valor_insertado);
+            this._raiz = nuevoNodo;
+            this._cardinal++;
+            return;
+        }
 
-    public void eliminar(T elem){
-        Nodo candidatoNodo = buscarNodo(elem);
-        if (candidatoNodo==null||elem.compareTo(candidatoNodo.valor)!=0){
+        Nodo nodoExistenteOPrevio = buscarNodo(clave_insertada);
+
+        int comparacion = clave_insertada.compareTo(nodoExistenteOPrevio.clave);
+        if (comparacion==0){
+            // TODO: deberíamos modificar el valor por el asignado o dejarlo como esta?
+            return;
+        }
+        else{
+            Nodo nuevoNodo = new Nodo(clave_insertada, valor_insertado);
+            nuevoNodo.padre = nodoExistenteOPrevio;
+            this._cardinal++;
+            if (comparacion>0){
+                nodoExistenteOPrevio.der = nuevoNodo;
+            }
+            else {
+                nodoExistenteOPrevio.izq = nuevoNodo;
+            }
+        }
+    }
+
+    public boolean pertenece(K clave_buscada){
+        Nodo nodoCandidato = buscarNodo(clave_buscada);
+        return nodoCandidato!=null && clave_buscada.compareTo(nodoCandidato.clave)==0;
+    }
+
+    public V obtener(K clave_buscada){
+        Nodo nodoCandidato = buscarNodo(clave_buscada);
+        return nodoCandidato.valor;
+    }
+
+    public void eliminar(K clave_a_eliminar){
+        
+        Nodo candidatoNodo = buscarNodo(clave_a_eliminar);
+        
+        if (candidatoNodo==null||clave_a_eliminar.compareTo(candidatoNodo.clave)!=0){
             return;
         }
         else{
@@ -181,37 +158,26 @@ class ABB<T extends Comparable<T>> { //esto significa que come T genérico y que
                 reemplazar(candidatoNodo);
             }
             else{
-                Nodo sucesor = minimoNodo(candidatoNodo.der);
-                candidatoNodo.valor = sucesor.valor;
-                reemplazar(sucesor);
+                Nodo reemplazo = minimoNodo(candidatoNodo.der);
+                candidatoNodo.valor = reemplazo.valor;
+                reemplazar(reemplazo);
             }
             this._cardinal --;
         }
     }
 
-    public String toString(){
-        String result = "{";
-        ABB_Iterador iter = this.iterador();
-        while (iter.haySiguiente()){
-            result += iter.siguiente().toString();
-            if (iter.haySiguiente()){
-                result += ",";
-            }
-        }
-        return result + "}";
-    }
-
     public class ABB_Iterador {
-        private Nodo _actual=ABB.this.minimoNodo(_raiz);
+        private Nodo _actual = ABB.this.minimoNodo(_raiz);
 
         public boolean haySiguiente() {            
             return _actual != null;
         }
     
-        public T siguiente() {
-            T valor_actual = _actual.valor;
+        public K siguiente() {
+
+            K clave_actual = _actual.clave;
             _actual = ABB.this.sucesor(_actual);
-            return valor_actual;
+            return clave_actual;
         }
     }
 
