@@ -6,20 +6,34 @@ interface ColaDePrioridad <T>{
      * 
      * 
      */
-    public void maximo();
+    public T maximo();
     
     /**
      * Ubica el elemento respetando el orden de prioridad
      * 
      * 
      */
-    public void agregar(T elem);
+    public void insertar(T elem);
+    
+    /**
+     * Ubica el elemento respetando el orden de prioridad
+     * 
+     * 
+     */
+    public void insertarHandle(Handle<T> hand);
     
     /**
      * Reemplaza el máximo por el "último" elemento
      * respetando el orden de prioridad y devuelve el máximo
      * 
      */
-    public T sacarMaximo();
+    public void eliminarMaximo();
+
+    /**
+     * Ubica el elemento respetando el orden de prioridad
+     * 
+     * 
+     */
+    public Handle<T> eliminarMaxHandle();
     
 }
