@@ -2,18 +2,18 @@ package aed.tp2;
 
 public class AirMiles implements SistemaAirMiles {
 
-    private ABB<Integer, Usuario> usuarios; 
+    private ABB<Integer, Handle<Usuario>> usuarios; 
     
     private int _elMasAcumulador;
     private int _elMasCanjeador;
     
     private Trie<String, Promocion> _promociones;
     
-    // TODO: qué come este maxheap
-    private MaxHeap<Integer> _rankingMillasDisponibles; 
+    // // TODO: qué come este maxheap
+    // private MaxHeap<Integer> _rankingMillasDisponibles; 
     
-    //TODO: es la pregunta de Daniela, si no necesitamos el comaprable esto estaría bien
-    private ListaEnlazada<int[]> _paresTransferidoresExclusivos; 
+    // //TODO: es la pregunta de Daniela, si no necesitamos el comaprable esto estaría bien
+    // private ListaEnlazada<int[]> _paresTransferidoresExclusivos; 
 
 
     public AirMiles() {
