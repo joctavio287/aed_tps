@@ -1,6 +1,6 @@
 package aed.tp2;
 
-class Usuario {
+class Usuario implements Comparable<Usuario>{
     private int ID;
     private int numeroBonos;
     private double millasDisponibles;
@@ -9,9 +9,11 @@ class Usuario {
     private double millasTotales;
     private double millasCanjeadas;
 
-    private HandleLE handleExclusivo;  
+    // private HandleLE handleExclusivo;
 
-    private HandleMH handleRankingDisponibles;
-
+    @Override
+    public int compareTo(Usuario otroUsuario){
+        return (int) this.millasDisponibles - (int) otroUsuario.millasDisponibles;
+    }
 
 }
