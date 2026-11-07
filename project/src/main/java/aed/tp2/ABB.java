@@ -120,6 +120,7 @@ public class ABB<K extends Comparable<K>, V> implements Diccionario<K, V> {
 
         int comparacion = clave_insertada.compareTo(nodoExistenteOPrevio.clave);
         if (comparacion==0){
+            nodoExistenteOPrevio.valor=valor_insertado;
             // TODO: deberíamos modificar el valor por el asignado o dejarlo como esta?
             return;
         }
