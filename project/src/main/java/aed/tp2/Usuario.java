@@ -13,7 +13,29 @@ class Usuario implements Comparable<Usuario>{
 
     @Override
     public int compareTo(Usuario otroUsuario){
-        return (int) this.millasDisponibles - (int) otroUsuario.millasDisponibles;
+        if (this.millasDisponibles>otroUsuario.millasDisponibles){
+            return 1;
+        }
+        else if (this.millasDisponibles==otroUsuario.millasDisponibles){
+            return 0;
+        }
+        else{
+            return -1;
+        }
+    }
+
+    @Override
+    public boolean equals(Object otroUsuario){
+		boolean otroEsNull = (otroUsuario == null);
+        if (otroEsNull){
+            return false;
+        }
+        boolean claseDistinta = otroUsuario.getClass() != this.getClass();
+        if (claseDistinta) {
+			return false;
+		}
+        Usuario UsuarioComparacion = (Usuario) otroUsuario;
+        return this.ID == UsuarioComparacion.ID;
     }
 
 }
