@@ -24,6 +24,7 @@ class MaxHeap <T extends Comparable<T>> implements ColaDePrioridad<T>{
         public void eliminar(){
             int n = MaxHeap.this.arreglo_handles.size();
             int indice_a_eliminar = this.getIndice();
+
             if (indice_a_eliminar==n-1){
                 MaxHeap.this.arreglo_handles.remove(n-1);        
             }
@@ -39,7 +40,6 @@ class MaxHeap <T extends Comparable<T>> implements ColaDePrioridad<T>{
             // usamos el indice del hanfle borrado
             this.indice = -1;
             return ;
-
         }
 
         public void modificar(T valor_a_modificar){ 
@@ -81,6 +81,7 @@ class MaxHeap <T extends Comparable<T>> implements ColaDePrioridad<T>{
     private int comparacion(int indice1, int indice2){
         return this.arreglo_handles.get(indice1).valor().compareTo(this.arreglo_handles.get(indice2).valor());
     }
+
     private void subir(int indice_a_subir){
         // El índice del padre es siempre (indice_a_subir-1)/2
         while (indice_a_subir>0 && comparacion(indice_a_subir, (int) (indice_a_subir-1)/2)>0){
@@ -113,26 +114,28 @@ class MaxHeap <T extends Comparable<T>> implements ColaDePrioridad<T>{
             }
         }
         // En caso de que 2*indice_a_bajar+1>=n es que no tiene hijos y no se puede bajar más
-    
     }
 
-    public T maximo(){
-        return this.arreglo_handles.get(0).valor();
-    };
-    
     public Handle<T> insertar(T elem){
         int n = this.arreglo_handles.size();
-        HandleMH handle_nuevo = new HandleMH(
-            n, elem
-        );
+
+        HandleMH handle_nuevo = new HandleMH(n, elem);
         this.arreglo_handles.add(handle_nuevo);
         subir(n);
         return handle_nuevo;
     };
     
-    public void eliminarMaximo(){
-        this.arreglo_handles.get(0).eliminar();
-        return;
+    public T maximo(){
+        return this.arreglo_handles.get(0).valor();
     };
 
+    public Handle<T> eliminarMaximo(){
+        Handle<T> maximo = this.arreglo_handles.get(0);
+        maximo.eliminar();
+        return maximo;
+    };
+
+    public int size(){
+        return this.arreglo_handles.size();
+    }
 }
