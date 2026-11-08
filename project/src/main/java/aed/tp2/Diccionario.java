@@ -9,14 +9,14 @@ interface Diccionario <K, V> {
     
     /**
      * Inserta una par (clave, valor)
-     * Si no existe se rompe: es parte del "requiere"
+     * Si existe lo pisa
      * 
      */
     public void insertar(K clave, V valor);
     
     /**
      * Devuelve el valor de la clave 
-     * Si no existe se rompe: es parte del "requiere"
+     * Si no existe devuelve null
      * 
      */
     public V obtener(K clave);

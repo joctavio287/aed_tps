@@ -121,7 +121,6 @@ public class ABB<K extends Comparable<K>, V> implements Diccionario<K, V> {
         int comparacion = clave_insertada.compareTo(nodoExistenteOPrevio.clave);
         if (comparacion==0){
             nodoExistenteOPrevio.valor=valor_insertado;
-            // TODO: deberíamos modificar el valor por el asignado o dejarlo como esta?
             return;
         }
         else{
@@ -143,9 +142,16 @@ public class ABB<K extends Comparable<K>, V> implements Diccionario<K, V> {
     }
 
     public V obtener(K clave_buscada){
-        //no hay q hacer el chequeo de arriba?
         Nodo nodoCandidato = buscarNodo(clave_buscada);
+        if (nodoCandidato!=null && clave_buscada.compareTo(nodoCandidato.clave)==0){
         return nodoCandidato.valor;
+        }
+        //solo cubri el caso en que el candidato no sea el buscado, ahí devuelve null en vez 
+        // de  pasar algo mal silenciosamente
+        else{
+            return null;
+        }
+
     }
 
     public void eliminar(K clave_a_eliminar){
@@ -162,6 +168,7 @@ public class ABB<K extends Comparable<K>, V> implements Diccionario<K, V> {
             else{
                 Nodo reemplazo = minimoNodo(candidatoNodo.der);
                 candidatoNodo.valor = reemplazo.valor;
+                candidatoNodo.clave = reemplazo.clave;
                 reemplazar(reemplazo);
             }
             this._cardinal --;
