@@ -146,7 +146,7 @@ public class ABB<K extends Comparable<K>, V> implements Diccionario<K, V> {
         if (nodoCandidato!=null && clave_buscada.compareTo(nodoCandidato.clave)==0){
             return nodoCandidato.valor;
         }
-        //solo cubri el caso en que el candidato no sea el buscado, ahí devuelve null en vez 
+        // solo cubri el caso en que el candidato no sea el buscado, ahí devuelve null en vez 
         // de  pasar algo mal silenciosamente
         else{
             return null;

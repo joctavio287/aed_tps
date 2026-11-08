@@ -20,7 +20,7 @@ interface ColaDePrioridad <T>{
      * respetando el orden de prioridad y devuelve el máximo
      * 
      */
-    public void eliminarMaximo();
+    public Handle<T> eliminarMaximo();
 
     /**
      * Ubica el elemento respetando el orden de prioridad
