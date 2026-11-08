@@ -12,7 +12,7 @@ class Usuario implements Comparable<Usuario>{
         this.millasDisponibles = 0;
         this.millasTotales = 0;
     }
-    public double MillasDisponible(){
+    public double MillasDisponibles(){
         return this.millasDisponibles;
     }
     public double MillasCanjeadas(){
