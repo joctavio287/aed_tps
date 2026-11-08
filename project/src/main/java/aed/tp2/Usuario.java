@@ -4,12 +4,44 @@ class Usuario implements Comparable<Usuario>{
     private int ID;
     private int numeroBonos;
     private double millasDisponibles;
-    
-    //estas ahora no me queda claro que sean necesarias
-    private double millasTotales;
     private double millasCanjeadas;
+    private double millasTotales;
 
-    // private HandleLE handleExclusivo;
+    public Usuario(int ID, int numeroBonos){
+        this.ID = ID;
+        this.numeroBonos = numeroBonos;
+        this.millasCanjeadas = 0;
+        this.millasDisponibles = 0;
+        this.millasTotales = 0;
+    }
+    public double MillasDisponible(){
+        return this.millasDisponibles;
+    }
+    public double MillasCanjeadas(){
+        return this.millasCanjeadas;
+    }
+    public double MillasTotales(){
+        return this.millasTotales;
+    }
+    public int numeroBonos(){
+        return this.numeroBonos;
+    }
+    public int ID(){
+        return this.ID;
+    }
+
+    public void sumarMillasDisponibles(double millas){
+        this.millasDisponibles+=millas;
+    }
+    public void sumarMillasCanjeadas(double millas){
+        this.millasCanjeadas+=millas;
+    }
+    public void sumarMillasTotales(double millas){
+        this.millasTotales+=millas;
+    }
+    public void sumarUnBono(){
+        this.numeroBonos ++;
+    }
 
     @Override
     public int compareTo(Usuario otroUsuario){
