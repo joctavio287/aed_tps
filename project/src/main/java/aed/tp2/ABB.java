@@ -144,7 +144,7 @@ public class ABB<K extends Comparable<K>, V> implements Diccionario<K, V> {
     public V obtener(K clave_buscada){
         Nodo nodoCandidato = buscarNodo(clave_buscada);
         if (nodoCandidato!=null && clave_buscada.compareTo(nodoCandidato.clave)==0){
-        return nodoCandidato.valor;
+            return nodoCandidato.valor;
         }
         //solo cubri el caso en que el candidato no sea el buscado, ahí devuelve null en vez 
         // de  pasar algo mal silenciosamente
@@ -181,12 +181,15 @@ public class ABB<K extends Comparable<K>, V> implements Diccionario<K, V> {
         public boolean haySiguiente() {            
             return _actual != null;
         }
-    
-        public K siguiente() {
-
-            K clave_actual = _actual.clave;
+        public K clave(){
+            return _actual.clave;
+        }
+        public V valor(){
+            return _actual.valor;
+        }
+        public void siguiente() {
             _actual = ABB.this.sucesor(_actual);
-            return clave_actual;
+            return;
         }
     }
 
