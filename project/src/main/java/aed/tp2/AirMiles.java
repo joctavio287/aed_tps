@@ -12,7 +12,7 @@ public class AirMiles implements SistemaAirMiles {
     
     private Trie<String, Promocion> promociones;
     private ListaEnlazada<ParTransferidor> paresTransferidoresExclusivos; 
-    private ArrayList<Handle<ParTransferidor>> _handlesParesTransferidores;
+    private ArrayList<Handle<ParTransferidor>> handlesParesTransferidores;
 
     private void actualizarAcumulador(Usuario usuario_competidor){
         if (acumulador==null||usuario_competidor.MillasTotales()>=acumulador.MillasTotales()){
@@ -43,6 +43,7 @@ public class AirMiles implements SistemaAirMiles {
         Handle<Usuario> handle_usuario = this.ranking.insertar(usuario);
         usuarios.insertar(id, handle_usuario);
         actualizarAcumulador(usuario);
+        actualizarCanjeador(usuario);
         return handle_usuario;
     }
 
@@ -103,7 +104,6 @@ public class AirMiles implements SistemaAirMiles {
         Handle<Usuario> handle_usuario = this.usuarios.obtener(id);
         Usuario usuario_modificado = handle_usuario.valor();
 
-        
         Promocion promocion = this.promociones.obtener(nombrePromo);
         double factorP = promocion.factorP();
         double ganancia = distancia * factorCategoria(id) * factorP;
@@ -121,6 +121,9 @@ public class AirMiles implements SistemaAirMiles {
         usuario_modificado.sumarMillasDisponibles(ganancia);
         usuario_modificado.sumarMillasTotales(ganancia);
         handle_usuario.modificar(usuario_modificado);
+        //TODO: nos dimos cuenta que no actualizamos el ABB, habría que actualizarlo
+        // no llegamos a ver bien cómo hacerlo.
+        // Es la misma historia en todos los lugares donde se modifican los handles del heap
         actualizarAcumulador(usuario_modificado);
         
     }
@@ -185,11 +188,11 @@ public class AirMiles implements SistemaAirMiles {
         
         if (inhabilitado_para_exclusividad){
             if (destino_modificado.indiceParTransferidor()!=-1){
-                _handlesParesTransferidores.get(indice_destino).eliminar();
+                handlesParesTransferidores.get(indice_destino).eliminar();
                 destino_modificado.definirIndiceParTransferidor(-1);
             }
             else if (origen_modificado.indiceParTransferidor()!=-1){
-                _handlesParesTransferidores.get(indice_origen).eliminar();
+                handlesParesTransferidores.get(indice_origen).eliminar();
                 origen_modificado.definirIndiceParTransferidor(-1);
             }
             origen_modificado.modificarTranferidor();
@@ -200,14 +203,14 @@ public class AirMiles implements SistemaAirMiles {
         }
         if (indice_destino!=indice_origen){
             if (indice_destino==-1){
-                _handlesParesTransferidores.get(indice_origen).eliminar();
+                handlesParesTransferidores.get(indice_origen).eliminar();
             }
             else if (indice_origen==-1){
-                _handlesParesTransferidores.get(indice_destino).eliminar();
+                handlesParesTransferidores.get(indice_destino).eliminar();
             }
             else{
-                _handlesParesTransferidores.get(indice_destino).eliminar();
-                _handlesParesTransferidores.get(indice_origen).eliminar();
+                handlesParesTransferidores.get(indice_destino).eliminar();
+                handlesParesTransferidores.get(indice_origen).eliminar();
             }
             destino_modificado.definirIndiceParTransferidor(-1);
             origen_modificado.definirIndiceParTransferidor(-1);
@@ -219,8 +222,8 @@ public class AirMiles implements SistemaAirMiles {
                 Handle<ParTransferidor> info_transferidores = this.paresTransferidoresExclusivos.agregarAtras(
                     new ParTransferidor(origen_modificado, destino_modificado)
                 );
-                _handlesParesTransferidores.add(info_transferidores);
-                int indice_handle = _handlesParesTransferidores.size()-1;
+                handlesParesTransferidores.add(info_transferidores);
+                int indice_handle = handlesParesTransferidores.size()-1;
                 destino_modificado.definirIndiceParTransferidor(indice_handle);
                 origen_modificado.definirIndiceParTransferidor(indice_handle);
             }
