@@ -35,17 +35,17 @@ public class ListaEnlazada <T extends Comparable<T>>{
         }
 
         public void modificar(T valor_a_modificar){ 
-            // TODO
-            return;
-        }
-
-        public int compareTo(Handle<T> handle_a_comparar){
-            return this.valor().compareTo(handle_a_comparar.valor());
+            this.puntero.dato = valor_a_modificar;
         }
 
         public boolean equals(Handle<T> handle_a_comparar){
-            // TODO
-            return true;
+            int comparacion = this.valor().compareTo(handle_a_comparar.valor());
+            if (comparacion==0){
+                return true;
+            }
+            else{
+                return false;
+            }
         }
 
         public String toString(){
