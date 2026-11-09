@@ -1,6 +1,6 @@
 package aed.tp2;
-
 import static java.lang.Math.min;
+import java.util.ArrayList;
 
 public class AirMiles implements SistemaAirMiles {
 
@@ -11,10 +11,8 @@ public class AirMiles implements SistemaAirMiles {
     private Usuario canjeador;
     
     private Trie<String, Promocion> promociones;
-    
-    
-    // //TODO: es la pregunta de Daniela, si no necesitamos el comaprable esto estaría bien
-    // private ListaEnlazada<int[]> _paresTransferidoresExclusivos; 
+    private ListaEnlazada<ParTransferidor> paresTransferidoresExclusivos; 
+    private ArrayList<Handle<ParTransferidor>> _handlesParesTransferidores;
 
     private void actualizarAcumulador(Usuario usuario_competidor){
         if (acumulador==null||usuario_competidor.MillasTotales()>=acumulador.MillasTotales()){
@@ -32,12 +30,14 @@ public class AirMiles implements SistemaAirMiles {
         iniciarPromocion("NoPromo", 1.0);
         this.ranking = new MaxHeap<Usuario>();
         this.usuarios = new ABB<Integer, Handle<Usuario>>();
+        this.paresTransferidoresExclusivos = new ListaEnlazada<ParTransferidor>();
+
         
         // Los metodos de consulta ahora van a devolver 0 hasta que se llene de verdad
         this.canjeador = new Usuario(0);
         this.acumulador = new Usuario(0);
     }
-    
+
     private Handle<Usuario> registrarUsuarioConOutput(int id) {
         Usuario usuario = new Usuario(id);
         Handle<Usuario> handle_usuario = this.ranking.insertar(usuario);
@@ -103,6 +103,7 @@ public class AirMiles implements SistemaAirMiles {
         Handle<Usuario> handle_usuario = this.usuarios.obtener(id);
         Usuario usuario_modificado = handle_usuario.valor();
 
+        
         Promocion promocion = this.promociones.obtener(nombrePromo);
         double factorP = promocion.factorP();
         double ganancia = distancia * factorCategoria(id) * factorP;
@@ -164,29 +165,94 @@ public class AirMiles implements SistemaAirMiles {
         return this.canjeador.ID();
     }
 
-    // TODO: nos falta hacer promociones (Trie) y la lista de transferidores Exclusivos
     public void transferirMillas(int origen, int destino, double cantidad) {
-        // actualiza parestransferidores exclusivos
-        //   si origen o destino tiene un handle prexsitente sin el par destino u origen correspondiente
-        //   se elimina el par de la lista vía el handle
-        //   si no tiene un handle y su par tampoco, lo crea y lo guarda en ambos.
+        Handle<Usuario> handle_destino = this.usuarios.obtener(destino);
+        Handle<Usuario> handle_origen = this.usuarios.obtener(origen);
+        Usuario destino_modificado = handle_destino.valor();
+        Usuario origen_modificado = handle_origen.valor();
+
+        // Acorde a la aclaración del TP también se modifican las Canjeadas para el que pierde
+        destino_modificado.sumarMillasDisponibles(cantidad);
+        origen_modificado.sumarMillasDisponibles(-cantidad);
+        origen_modificado.sumarMillasCanjeadas(cantidad);
         
-        throw new UnsupportedOperationException("Sin implementar");
+        int indice_destino = destino_modificado.indiceParTransferidor();
+        int indice_origen = origen_modificado.indiceParTransferidor();
+
+        boolean inhabilitado_para_exclusividad  = (
+            origen_modificado.fuisteTransferidor() || destino_modificado.fuisteTransferidor()
+        );
+        
+        if (inhabilitado_para_exclusividad){
+            if (destino_modificado.indiceParTransferidor()!=-1){
+                _handlesParesTransferidores.get(indice_destino).eliminar();
+                destino_modificado.definirIndiceParTransferidor(-1);
+            }
+            else if (origen_modificado.indiceParTransferidor()!=-1){
+                _handlesParesTransferidores.get(indice_origen).eliminar();
+                origen_modificado.definirIndiceParTransferidor(-1);
+            }
+            origen_modificado.modificarTranferidor();
+            destino_modificado.modificarTranferidor();
+            handle_destino.modificar(destino_modificado);
+            handle_origen.modificar(origen_modificado);
+            return;
+        }
+        if (indice_destino!=indice_origen){
+            if (indice_destino==-1){
+                _handlesParesTransferidores.get(indice_origen).eliminar();
+            }
+            else if (indice_origen==-1){
+                _handlesParesTransferidores.get(indice_destino).eliminar();
+            }
+            else{
+                _handlesParesTransferidores.get(indice_destino).eliminar();
+                _handlesParesTransferidores.get(indice_origen).eliminar();
+            }
+            destino_modificado.definirIndiceParTransferidor(-1);
+            origen_modificado.definirIndiceParTransferidor(-1);
+            origen_modificado.modificarTranferidor();
+            destino_modificado.modificarTranferidor();
+        }
+        else if (indice_destino==indice_origen&&indice_destino==-1){
+                // Agregamos un par transferidor a la lista enlazada y al arreglo de handlees
+                Handle<ParTransferidor> info_transferidores = this.paresTransferidoresExclusivos.agregarAtras(
+                    new ParTransferidor(origen_modificado, destino_modificado)
+                );
+                _handlesParesTransferidores.add(info_transferidores);
+                int indice_handle = _handlesParesTransferidores.size()-1;
+                destino_modificado.definirIndiceParTransferidor(indice_handle);
+                origen_modificado.definirIndiceParTransferidor(indice_handle);
+            }
+        handle_destino.modificar(destino_modificado);
+        handle_origen.modificar(origen_modificado);
+        return;
+    }
+    
+    public int[][] paresTransferidoresExclusivos() {
+        int n = this.paresTransferidoresExclusivos.longitud();
+        int[][] res = new int[n][2];
+        
+        for (int i=0; i<n;i++) {
+            int[] arreglo = this.paresTransferidoresExclusivos.obtener(i).toArreglo();
+            res[i] = arreglo;
+        }
+        return res;
     }
 
     public void iniciarPromocion(String nombre, double factor) {
-        throw new UnsupportedOperationException("Sin implementar");
+        Promocion promoNueva = new Promocion(nombre, 0, factor, 0);
+        promociones.insertar(nombre, promoNueva);
     }
 
     public void iniciarPromocionConTope(String nombre, double factor, double tope) {
-        throw new UnsupportedOperationException("Sin implementar");
+        Promocion promoNueva = new Promocion(nombre, 0, factor, tope);
+        promociones.insertar(nombre, promoNueva);
     }
 
     public void finalizarPromocion(String nombre) {
-        throw new UnsupportedOperationException("Sin implementar");
-    }
-
-    public int[][] paresTransferidoresExclusivos() {
-        throw new UnsupportedOperationException("Sin implementar");
+        promociones.insertar(
+            nombre, new Promocion(nombre, 0, 1.0, 0)
+        );
     }
 }
