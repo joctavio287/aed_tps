@@ -5,12 +5,33 @@ class Usuario implements Comparable<Usuario>{
     private double millasDisponibles;
     private double millasCanjeadas;
     private double millasTotales;
+    
+    private int indiceHandleTransferidor;
+    
+    // imposibilidad de estar en transferidoresExclusivos ya sea porque estuve
+    // o porque transferí a dos o mas que estaban en esta condicion
+    private boolean fuisteTransferidor;
 
     public Usuario(int ID){
         this.ID = ID;
         this.millasCanjeadas = 0;
         this.millasDisponibles = 0;
         this.millasTotales = 0;
+        this.indiceHandleTransferidor = -1;
+        this.fuisteTransferidor = false;
+    }
+    public boolean fuisteTransferidor(){
+        return this.fuisteTransferidor;
+    }
+    public void modificarTranferidor(){
+        this.fuisteTransferidor = !this.fuisteTransferidor();
+    }
+    public int indiceParTransferidor(){
+        return this.indiceHandleTransferidor;
+    }
+    public void definirIndiceParTransferidor(int ind){
+        this.indiceHandleTransferidor = ind;
+        return;
     }
     public double MillasDisponibles(){
         return this.millasDisponibles;
